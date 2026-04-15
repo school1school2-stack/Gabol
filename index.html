@@ -3,264 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول عبدالعزيز الفيفي - الترا مودرن</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <title>جدول المدرسة الفخم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-gradient: linear-gradient(45deg, #ee9ca7 0%, #ffdde1 100%);
-            --header-color: #2c3e50;
-            --sun-color: #ff7675;
-            --mon-color: #74b9ff;
-            --tue-color: #55efc4;
-            --wed-color: #a29bfe;
-            --thu-color: #ffeaa7;
-            --cell-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            --primary-color: #34495e;
+            --secondary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --bg-color: #f4f7f6;
+            --cell-bg: #fff;
+            --cell-border: #e0e0e0;
+            --hover-color: #eaf2f8;
+            --time-bg: #e1f5fe;
+            --time-text: #0277bd;
         }
 
         body {
-            font-family: 'Tajawal', sans-serif;
-            background: #f8f9fa;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        .capture-area {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        .timetable-container {
+            background-color: var(--cell-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
             width: 100%;
-            max-width: 1100px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 3px solid #f1f2f6;
-            padding-bottom: 20px;
-        }
-
-        header h1 {
-            font-weight: 900;
-            font-size: 3rem;
-            color: var(--header-color);
-            margin: 0;
-        }
-
-        .download-btn {
-            background: #2ecc71;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 30px;
-            transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .download-btn:hover {
-            transform: scale(1.05);
-            background: #27ae60;
+            max-width: 1200px;
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 15px;
+            border-collapse: collapse;
         }
 
-        /* تلوين شريط الحصص العلوي */
-        thead th {
-            background: var(--header-color);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 1.2rem;
-            box-shadow: var(--cell-shadow);
-        }
-
-        .time-text {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: normal;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        /* تلوين الايام */
-        .day-label {
-            color: white;
-            font-weight: 900;
-            width: 120px;
-            border-radius: 15px;
+        th, td {
             text-align: center;
-            font-size: 1.3rem;
-            box-shadow: var(--cell-shadow);
+            padding: 15px;
+            border: 1px solid var(--cell-border);
         }
 
-        .sun { background: var(--sun-color); }
-        .mon { background: var(--mon-color); }
-        .tue { background: var(--tue-color); }
-        .wed { background: var(--wed-color); }
-        .thu { background: var(--thu-color); }
-
-        .cell {
-            background: #ffffff;
-            border-radius: 20px;
-            min-height: 110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-            border: 2px solid #f1f2f6;
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
 
-        .has-subject {
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            color: white;
-            border: none;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
-        }
-
-        .subject-icon {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
-        }
-
-        .room-tag {
-            font-size: 0.8rem;
-            background: rgba(255,255,255,0.2);
-            padding: 2px 10px;
-            border-radius: 10px;
-            margin-top: 5px;
-        }
-
-        .break {
-            background: #dfe6e9;
-            color: #636e72;
+        .day-cell {
+            background-color: var(--secondary-color);
+            color: #fff;
             font-weight: bold;
-            border-radius: 15px;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-            letter-spacing: 5px;
+            font-size: 1.1rem;
+        }
+
+        .time-cell {
+            background-color: var(--time-bg);
+            color: var(--time-text);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        .lesson-cell {
+            background-color: var(--cell-bg);
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .lesson-cell:hover {
+            background-color: var(--hover-color);
+            cursor: pointer;
+        }
+
+        .lesson-cell:hover .lesson-details {
+            display: block;
+        }
+
+        .lesson-details {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 10;
+            width: 150px;
+            text-align: center;
+        }
+
+        .lesson-details::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+        }
+
+        .lesson-icon {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .lesson-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .class-level {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px;
+                font-size: 0.8rem;
+            }
+
+            .day-cell {
+                font-size: 0.9rem;
+            }
+
+            .lesson-icon {
+                font-size: 1.2rem;
+            }
+
+            .lesson-name {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <button class="download-btn" onclick="downloadImage()">
-        <i class="fas fa-camera"></i> حفظ الجدول بصورة عالية الدقة (8K)
-    </button>
-
-    <div id="table-container" class="capture-area">
-        <header>
-            <h1>عبدالعزيز الفيفي</h1>
-            <p style="font-size: 1.2rem; color: #636e72;">جدول الحصص الأسبوعي - 1447هـ</p>
-        </header>
-
+    <div class="timetable-container">
         <table>
             <thead>
                 <tr>
-                    <th style="background: #636e72;">اليوُم</th>
-                    <th>١ <span class="time-text">6:30 - 7:20</span></th>
-                    <th>٢ <span class="time-text">7:20 - 8:10</span></th>
-                    <th>٣ <span class="time-text">8:10 - 9:00</span></th>
-                    <th style="background: #fab1a0;">الفسحة</th>
-                    <th>٤ <span class="time-text">9:25 - 10:15</span></th>
-                    <th>٥ <span class="time-text">10:15 - 11:05</span></th>
-                    <th>٦ <span class="time-text">11:05 - 11:55</span></th>
-                    <th>٧ <span class="time-text">11:55 - 12:45</span></th>
+                    <th rowspan="2">اليوم</th>
+                    <th colspan="2">الحصة الأولى</th>
+                    <th colspan="2">الحصة الثانية</th>
+                    <th colspan="2">الحصة الثالث</th>
+                    <th colspan="2">الحصة الرابع</th>
+                    <th colspan="2">الحصة الخامسة</th>
+                </tr>
+                <tr>
+                    <th>من</th>
+                    <th>إلى</th>
+                    <th>من</th>
+                    <th>إلى</th>
+                    <th>من</th>
+                    <th>إلى</th>
+                    <th>من</th>
+                    <th>إلى</th>
+                    <th>من</th>
+                    <th>إلى</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="day-label sun">الأحد</td>
-                    <td><div class="cell has-subject"><i class="fas fa-language subject-icon"></i>اللغوية<span class="room-tag">2/1</span></div></td>
-                    <td><div class="cell has-subject"><i class="fas fa-language subject-icon"></i>اللغوية<span class="room-tag">1/1</span></div></td>
-                    <td><div class="cell"></div></td>
-                    <td rowspan="5" class="break">الفسحة المدرسية</td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
+                    <td class="day-cell">الأحد</td>
+                    <td class="time-cell">8:00</td>
+                    <td class="time-cell">8:45</td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-book lesson-icon"></i>
+                        <div class="lesson-name">لغويات</div>
+                        <div class="class-level">أول - ثاني</div>
+                        <div class="lesson-details">
+                            الأستاذ أحمد <br> القاعة 101
+                        </div>
+                    </td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-calculator lesson-icon"></i>
+                        <div class="lesson-name">رياضيات</div>
+                        <div class="class-level">ثاني - أول</div>
+                        <div class="lesson-details">
+                            الأستاذة سارة <br> القاعة 202
+                        </div>
+                    </td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-flask lesson-icon"></i>
+                        <div class="lesson-name">علوم</div>
+                        <div class="class-level">ثالث - أول</div>
+                        <div class="lesson-details">
+                            الأستاذ خالد <br> القاعة 303
+                        </div>
+                    </td>
+                    <td colspan="4"></td>
                 </tr>
                 <tr>
-                    <td class="day-label mon">الاثنين</td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell has-subject"><i class="fas fa-pen-fancy subject-icon"></i>اللغوية<span class="room-tag">4/1</span></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
+                    <td class="day-cell">الأثنين</td>
+                    <td class="time-cell">8:00</td>
+                    <td class="time-cell">8:45</td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-palette lesson-icon"></i>
+                        <div class="lesson-name">فنية</div>
+                        <div class="class-level">أول - ثالث</div>
+                        <div class="lesson-details">
+                            الأستاذة مريم <br> المرسم
+                        </div>
+                    </td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-globe lesson-icon"></i>
+                        <div class="lesson-name">جغرافيا</div>
+                        <div class="class-level">ثاني - أول</div>
+                        <div class="lesson-details">
+                            الأستاذ علي <br> القاعة 201
+                        </div>
+                    </td>
+                    <td colspan="6"></td>
                 </tr>
                 <tr>
-                    <td class="day-label tue">الثلاثاء</td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell has-subject"><i class="fas fa-spell-check subject-icon"></i>اللغوية<span class="room-tag">3/1</span></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell has-subject"><i class="fas fa-book-reader subject-icon"></i>اللغوية<span class="room-tag">6/1</span></div></td>
-                    <td><div class="cell"></div></td>
+                    <td class="day-cell">الثلاثاء</td>
+                    <td colspan="2"></td>
+                    <td class="time-cell">8:45</td>
+                    <td class="time-cell">9:30</td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-dumbbell lesson-icon"></i>
+                        <div class="lesson-name">رياضة</div>
+                        <div class="class-level">ثالث - أول</div>
+                        <div class="lesson-details">
+                            الأستاذ محمد <br> الصالة الرياضية
+                        </div>
+                    </td>
+                    <td colspan="4"></td>
                 </tr>
                 <tr>
-                    <td class="day-label wed">الأربعاء</td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
+                    <td class="day-cell">الأربعاء</td>
+                    <td class="time-cell">8:00</td>
+                    <td class="time-cell">8:45</td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-history lesson-icon"></i>
+                        <div class="lesson-name">تاريخ</div>
+                        <div class="class-level">أول - أول</div>
+                        <div class="lesson-details">
+                            الأستاذ حسين <br> القاعة 102
+                        </div>
+                    </td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-music lesson-icon"></i>
+                        <div class="lesson-name">موسيقى</div>
+                        <div class="class-level">ثاني - ثالث</div>
+                        <div class="lesson-details">
+                            الأستاذة ليلى <br> غرفة الموسيقى
+                        </div>
+                    </td>
+                    <td colspan="6"></td>
                 </tr>
                 <tr>
-                    <td class="day-label thu">الخميس</td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell has-subject"><i class="fas fa-feather-alt subject-icon"></i>اللغوية<span class="room-tag">5/1</span></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
-                    <td><div class="cell"></div></td>
+                    <td class="day-cell">الخميس</td>
+                    <td colspan="8"></td>
+                    <td class="time-cell">11:00</td>
+                    <td class="time-cell">11:45</td>
+                    <td class="lesson-cell">
+                        <i class="fas fa-laptop-code lesson-icon"></i>
+                        <div class="lesson-name">حاسب</div>
+                        <div class="class-level">ثالث - ثاني</div>
+                        <div class="lesson-details">
+                            الأستاذ عمر <br> معمل الحاسب
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-    <script>
-        function downloadImage() {
-            const container = document.getElementById('table-container');
-            
-            // رفع معامل المقياس (Scale) للحصول على دقة 8K فائقة
-            const scale = 4; 
-
-            html2canvas(container, {
-                scale: scale,
-                useCORS: true,
-                backgroundColor: "#ffffff",
-                borderRadius: 30
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'جدول_عبدالعزيز_الفيفي_8K.png';
-                link.href = canvas.toDataURL('image/png', 1.0);
-                link.click();
-            });
-        }
-    </script>
 </body>
 </html>
