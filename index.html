@@ -2,289 +2,259 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول المدرسة الفخم</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>جدول الحصص الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary-color: #34495e;
-            --secondary-color: #2c3e50;
-            --accent-color: #3498db;
-            --text-color: #333;
-            --bg-color: #f4f7f6;
-            --cell-bg: #fff;
-            --cell-border: #e0e0e0;
-            --hover-color: #eaf2f8;
-            --time-bg: #e1f5fe;
-            --time-text: #0277bd;
+            --bg: #ebf0f7;
+            --main-dark: #2c3e50;
+            --accent: #00d2ff;
+            --card-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+            --inner-shadow: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
         }
 
-        .timetable-container {
-            background-color: var(--cell-bg);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            width: 100%;
+        .download-panel {
+            margin-bottom: 25px;
+        }
+
+        .btn-8k {
+            background: linear-gradient(145deg, #00c3ff, #00adff);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            transition: 0.3s;
+        }
+
+        .btn-8k:active { box-shadow: var(--inner-shadow); transform: scale(0.98); }
+
+        .timetable-card {
+            background: var(--bg);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: var(--card-shadow);
             max-width: 1200px;
+            width: 100%;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 12px;
         }
 
-        th, td {
-            text-align: center;
+        /* الرأس - الحصص */
+        .period-header {
+            background: var(--main-dark);
+            color: white;
+            border-radius: 15px;
             padding: 15px;
-            border: 1px solid var(--cell-border);
+            text-align: center;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
         }
 
-        th {
-            background-color: var(--primary-color);
-            color: #fff;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        .day-cell {
-            background-color: var(--secondary-color);
-            color: #fff;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .time-cell {
-            background-color: var(--time-bg);
-            color: var(--time-text);
-            font-size: 0.8rem;
-            font-weight: 500;
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-
-        .lesson-cell {
-            background-color: var(--cell-bg);
-            transition: background-color 0.3s ease;
-            position: relative;
-        }
-
-        .lesson-cell:hover {
-            background-color: var(--hover-color);
-            cursor: pointer;
-        }
-
-        .lesson-cell:hover .lesson-details {
+        .time-box {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            padding: 5px;
             display: block;
         }
 
-        .lesson-details {
-            display: none;
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0,0,0,0.8);
-            color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            z-index: 10;
-            width: 150px;
+        /* الأيام */
+        .day-label {
+            background: #00cc99;
+            color: white;
+            font-weight: 900;
+            border-radius: 12px;
+            width: 100px;
             text-align: center;
+            box-shadow: 4px 4px 8px rgba(0, 204, 153, 0.3);
         }
 
-        .lesson-details::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+        .wednesday { background: var(--main-dark); }
+
+        /* الحصص */
+        .subject-cell {
+            background: var(--bg);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            min-height: 80px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.5);
         }
 
-        .lesson-icon {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            margin-bottom: 5px;
+        .subject-cell.filled {
+            background: #ffffff;
+            border-left: 5px solid var(--accent);
         }
 
-        .lesson-name {
-            font-weight: 600;
+        .subject-cell:hover { transform: translateY(-3px); }
+
+        .subject-name {
+            display: block;
+            font-weight: bold;
+            color: #444;
             font-size: 1rem;
         }
 
-        .class-level {
+        .class-info {
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: #888;
+            margin-top: 4px;
         }
 
-        @media (max-width: 768px) {
-            th, td {
-                padding: 10px;
-                font-size: 0.8rem;
-            }
+        .empty-cell {
+            background: var(--bg);
+            box-shadow: var(--inner-shadow);
+        }
 
-            .day-cell {
-                font-size: 0.9rem;
-            }
-
-            .lesson-icon {
-                font-size: 1.2rem;
-            }
-
-            .lesson-name {
-                font-size: 0.9rem;
-            }
+        /* الفسحة */
+        .break-vertical {
+            background: #f1f2f6;
+            color: #aaa;
+            border-radius: 10px;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-weight: bold;
+            letter-spacing: 5px;
+            box-shadow: var(--inner-shadow);
         }
     </style>
 </head>
 <body>
-    <div class="timetable-container">
-        <table>
-            <thead>
-                <tr>
-                    <th rowspan="2">اليوم</th>
-                    <th colspan="2">الحصة الأولى</th>
-                    <th colspan="2">الحصة الثانية</th>
-                    <th colspan="2">الحصة الثالث</th>
-                    <th colspan="2">الحصة الرابع</th>
-                    <th colspan="2">الحصة الخامسة</th>
-                </tr>
-                <tr>
-                    <th>من</th>
-                    <th>إلى</th>
-                    <th>من</th>
-                    <th>إلى</th>
-                    <th>من</th>
-                    <th>إلى</th>
-                    <th>من</th>
-                    <th>إلى</th>
-                    <th>من</th>
-                    <th>إلى</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="day-cell">الأحد</td>
-                    <td class="time-cell">8:00</td>
-                    <td class="time-cell">8:45</td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-book lesson-icon"></i>
-                        <div class="lesson-name">لغويات</div>
-                        <div class="class-level">أول - ثاني</div>
-                        <div class="lesson-details">
-                            الأستاذ أحمد <br> القاعة 101
-                        </div>
-                    </td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-calculator lesson-icon"></i>
-                        <div class="lesson-name">رياضيات</div>
-                        <div class="class-level">ثاني - أول</div>
-                        <div class="lesson-details">
-                            الأستاذة سارة <br> القاعة 202
-                        </div>
-                    </td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-flask lesson-icon"></i>
-                        <div class="lesson-name">علوم</div>
-                        <div class="class-level">ثالث - أول</div>
-                        <div class="lesson-details">
-                            الأستاذ خالد <br> القاعة 303
-                        </div>
-                    </td>
-                    <td colspan="4"></td>
-                </tr>
-                <tr>
-                    <td class="day-cell">الأثنين</td>
-                    <td class="time-cell">8:00</td>
-                    <td class="time-cell">8:45</td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-palette lesson-icon"></i>
-                        <div class="lesson-name">فنية</div>
-                        <div class="class-level">أول - ثالث</div>
-                        <div class="lesson-details">
-                            الأستاذة مريم <br> المرسم
-                        </div>
-                    </td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-globe lesson-icon"></i>
-                        <div class="lesson-name">جغرافيا</div>
-                        <div class="class-level">ثاني - أول</div>
-                        <div class="lesson-details">
-                            الأستاذ علي <br> القاعة 201
-                        </div>
-                    </td>
-                    <td colspan="6"></td>
-                </tr>
-                <tr>
-                    <td class="day-cell">الثلاثاء</td>
-                    <td colspan="2"></td>
-                    <td class="time-cell">8:45</td>
-                    <td class="time-cell">9:30</td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-dumbbell lesson-icon"></i>
-                        <div class="lesson-name">رياضة</div>
-                        <div class="class-level">ثالث - أول</div>
-                        <div class="lesson-details">
-                            الأستاذ محمد <br> الصالة الرياضية
-                        </div>
-                    </td>
-                    <td colspan="4"></td>
-                </tr>
-                <tr>
-                    <td class="day-cell">الأربعاء</td>
-                    <td class="time-cell">8:00</td>
-                    <td class="time-cell">8:45</td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-history lesson-icon"></i>
-                        <div class="lesson-name">تاريخ</div>
-                        <div class="class-level">أول - أول</div>
-                        <div class="lesson-details">
-                            الأستاذ حسين <br> القاعة 102
-                        </div>
-                    </td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-music lesson-icon"></i>
-                        <div class="lesson-name">موسيقى</div>
-                        <div class="class-level">ثاني - ثالث</div>
-                        <div class="lesson-details">
-                            الأستاذة ليلى <br> غرفة الموسيقى
-                        </div>
-                    </td>
-                    <td colspan="6"></td>
-                </tr>
-                <tr>
-                    <td class="day-cell">الخميس</td>
-                    <td colspan="8"></td>
-                    <td class="time-cell">11:00</td>
-                    <td class="time-cell">11:45</td>
-                    <td class="lesson-cell">
-                        <i class="fas fa-laptop-code lesson-icon"></i>
-                        <div class="lesson-name">حاسب</div>
-                        <div class="class-level">ثالث - ثاني</div>
-                        <div class="lesson-details">
-                            الأستاذ عمر <br> معمل الحاسب
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+<div class="download-panel">
+    <button class="btn-8k" onclick="saveAs8K()">
+        <i class="fas fa-magic"></i> تصدير الجدول بجودة احترافية
+    </button>
+</div>
+
+<div id="capture" class="timetable-card">
+    <h2 style="text-align: center; color: var(--main-dark); margin-top: 0;">جدول الحصص الأسبوعي - عبد العزيز الفيفي</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="background:transparent; color: #888;">اليوُم</th>
+                <th class="period-header">1<span class="time-box">06:30 - 07:20</span></th>
+                <th class="period-header">2<span class="time-box">07:20 - 08:10</span></th>
+                <th class="period-header">3<span class="time-box">08:10 - 09:00</span></th>
+                <th style="background:transparent; color: #888;">الفسحة</th>
+                <th class="period-header">4<span class="time-box">09:25 - 10:15</span></th>
+                <th class="period-header">5<span class="time-box">10:15 - 11:05</span></th>
+                <th class="period-header">6<span class="time-box">11:05 - 11:55</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="day-label">أحد</td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#6c5ce7">لغويات</span>
+                    <span class="class-info">أول - ثاني</span>
+                </td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#0984e3">لغويات</span>
+                    <span class="class-info">أول - أول</span>
+                </td>
+                <td class="subject-cell empty-cell"></td>
+                <td rowspan="5" class="break-vertical">فـسـحـة</td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+            </tr>
+            <tr>
+                <td class="day-label">أثنين</td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#e84393">لغويات</span>
+                    <span class="class-info">أول - رابع</span>
+                </td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+            </tr>
+            <tr>
+                <td class="day-label">ثلاثاء</td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#00cec9">لغويات</span>
+                    <span class="class-info">أول - ثالث</span>
+                </td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#fdcb6e">لغويات</span>
+                    <span class="class-info">أول - سادس</span>
+                </td>
+                <td class="subject-cell empty-cell"></td>
+            </tr>
+            <tr>
+                <td class="day-label wednesday">أربعاء</td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#6c5ce7">لغويات</span>
+                    <span class="class-info">أول - ثاني</span>
+                </td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+            </tr>
+            <tr>
+                <td class="day-label">خميس</td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell filled">
+                    <span class="subject-name" style="color:#e67e22">لغويات</span>
+                    <span class="class-info">أول - خامس</span>
+                </td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+                <td class="subject-cell empty-cell"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function saveAs8K() {
+        const element = document.getElementById('capture');
+        // رفع الـ scale لـ 4 يعطي دقة فائقة جداً (قريبة من 8K)
+        html2canvas(element, { 
+            scale: 4, 
+            backgroundColor: '#ebf0f7',
+            logging: false 
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'جدول_الفيفي_الاحترافي.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        });
+    }
+</script>
+
 </body>
 </html>
